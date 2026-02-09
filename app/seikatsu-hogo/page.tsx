@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   CheckCircle,
   HelpCircle,
   MapPin,
   FileText,
-  ArrowRight,
+  ChevronDown,
   AlertTriangle,
   Phone,
+  Heart,
 } from "lucide-react";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { JsonLd } from "@/components/JsonLd";
@@ -155,163 +155,163 @@ export default function SeikatsuHogoPage() {
 
       <Breadcrumb items={[{ label: "生活保護ガイド" }]} />
 
-      <h1 className="mb-2 text-2xl font-bold sm:text-3xl">
-        生活保護ガイド
-      </h1>
-      <p className="mb-8 text-lg text-muted">
-        生活保護は「最後のセーフティネット」です。誰でも申請する権利があります。
-      </p>
-
-      {/* Key message */}
-      <div className="mb-8 rounded-lg border-2 border-accent bg-accent-light p-5">
-        <p className="text-lg font-bold text-accent">
-          「生活保護は恥ずかしい」と思わないでください
-        </p>
-        <p className="mt-2 text-base text-foreground">
-          生活保護は憲法25条で保障された国民の権利です。
-          困ったときに使うための制度であり、利用することは全く恥ずかしいことではありません。
+      {/* Page header */}
+      <div className="mb-8">
+        <h1 className="mb-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
+          <span className="text-gradient">生活保護</span>ガイド
+        </h1>
+        <p className="text-base text-fg-secondary">
+          生活保護は「最後のセーフティネット」です。誰でも申請する権利があります。
         </p>
       </div>
 
-      {/* Application steps */}
-      <section aria-labelledby="steps-heading" className="mb-10">
+      {/* Key message card — gradient border */}
+      <div className="anim-up card-glow mb-10 p-5">
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-sm">
+            <Heart className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-base font-bold text-fg">
+              「生活保護は恥ずかしい」と思わないでください
+            </p>
+            <p className="mt-1 text-sm text-fg-secondary leading-relaxed">
+              生活保護は憲法25条で保障された国民の権利です。
+              困ったときに使うための制度であり、利用することは全く恥ずかしいことではありません。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ====== Application steps — timeline UI ====== */}
+      <section aria-labelledby="steps-heading" className="mb-12">
         <h2
           id="steps-heading"
-          className="mb-4 flex items-center gap-2 text-xl font-bold"
+          className="mb-5 flex items-center gap-2 text-lg font-extrabold text-fg"
         >
           <FileText className="h-5 w-5 text-accent" />
           申請の流れ（5ステップ）
         </h2>
-        <ol className="space-y-4">
+        <ol className="stagger relative ml-4 space-y-6 border-l-2 border-accent/20 pl-6">
           {applicationSteps.map((item) => (
-            <li
-              key={item.step}
-              className="rounded-lg border border-border p-4"
-            >
-              <div className="flex items-start gap-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-bold text-white">
-                  {item.step}
-                </span>
-                <div>
-                  <p className="text-lg font-bold">{item.title}</p>
-                  <p className="mt-1 text-base text-foreground leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
+            <li key={item.step} className="relative">
+              {/* Timeline dot */}
+              <span className="absolute -left-[33px] flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-xs font-bold text-white shadow-md">
+                {item.step}
+              </span>
+              <div className="card p-4">
+                <p className="text-base font-bold text-fg">{item.title}</p>
+                <p className="mt-1 text-sm text-fg-secondary leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             </li>
           ))}
         </ol>
       </section>
 
-      {/* Rejection warning */}
-      <div className="mb-10 rounded-lg border-2 border-warning bg-amber-50 p-5">
-        <div className="flex items-start gap-3">
-          <AlertTriangle className="mt-0.5 h-6 w-6 shrink-0 text-amber-600" />
-          <div>
-            <p className="text-lg font-bold text-amber-800">
-              窓口で断られた場合（水際作戦）
-            </p>
-            <p className="mt-2 text-base text-foreground leading-relaxed">
-              「まだ働ける」「親族に頼れ」などと言われて申請を受け付けてもらえないケースがあります。
-              これは違法な対応です。以下の対策を取ってください：
-            </p>
-            <ul className="mt-3 space-y-2 text-base">
-              <li className="flex items-start gap-2">
-                <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
-                <span>
-                  「申請します」と明確に意思表示する（書面で渡すとより確実）
-                </span>
+      {/* ====== Rejection warning ====== */}
+      <div className="anim-up mb-12 overflow-hidden rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50">
+        <div className="bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-3">
+          <p className="flex items-center gap-2 text-base font-bold text-white">
+            <AlertTriangle className="h-5 w-5" />
+            窓口で断られた場合（水際作戦）
+          </p>
+        </div>
+        <div className="p-5">
+          <p className="mb-4 text-sm text-fg-secondary leading-relaxed">
+            「まだ働ける」「親族に頼れ」などと言われて申請を受け付けてもらえないケースがあります。
+            これは違法な対応です。以下の対策を取ってください：
+          </p>
+          <ul className="space-y-3">
+            {[
+              "「申請します」と明確に意思表示する（書面で渡すとより確実）",
+              "やりとりを録音する（スマホの録音アプリでOK）",
+              "支援団体に同行を依頼する（つくろい東京ファンド、NPO法人もやいなど）",
+            ].map((text, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-sm">
+                <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+                <span className="text-fg">{text}</span>
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
-                <span>
-                  やりとりを録音する（スマホの録音アプリでOK）
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
-                <span>
-                  支援団体に同行を依頼する（一般社団法人つくろい東京ファンド、
-                  NPO法人もやいなど）
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
-                <span>
-                  法テラス（
-                  <a
-                    href="tel:0570-078374"
-                    className="font-bold text-accent underline"
-                  >
-                    0570-078374
-                  </a>
-                  ）に相談する
-                </span>
-              </li>
-            </ul>
-          </div>
+            ))}
+            <li className="flex items-start gap-2.5 text-sm">
+              <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+              <span className="text-fg">
+                法テラス（
+                <a
+                  href="tel:0570-078374"
+                  className="font-bold text-accent underline"
+                >
+                  0570-078374
+                </a>
+                ）に相談する
+              </span>
+            </li>
+          </ul>
         </div>
       </div>
 
-      {/* FAQ */}
-      <section aria-labelledby="faq-heading" className="mb-10">
+      {/* ====== FAQ — accordion ====== */}
+      <section aria-labelledby="faq-heading" className="mb-12">
         <h2
           id="faq-heading"
-          className="mb-4 flex items-center gap-2 text-xl font-bold"
+          className="mb-5 flex items-center gap-2 text-lg font-extrabold text-fg"
         >
           <HelpCircle className="h-5 w-5 text-accent" />
           よくある質問（Q&A）
         </h2>
-        <div className="space-y-4">
+        <div className="stagger space-y-3">
           {faqItems.map((item, i) => (
-            <details
-              key={i}
-              className="group rounded-lg border border-border"
-            >
-              <summary className="cursor-pointer px-4 py-4 text-lg font-bold text-foreground hover:bg-gray-50 list-none flex items-center justify-between">
-                <span className="flex items-start gap-2">
-                  <span className="shrink-0 text-accent">Q.</span>
-                  {item.question}
+            <details key={i} className="group card overflow-hidden">
+              <summary className="flex cursor-pointer items-center gap-3 px-4 py-4 text-sm font-bold text-fg transition-colors hover:bg-accent-light [&::-webkit-details-marker]:hidden list-none">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent-light text-xs font-extrabold text-accent">
+                  Q
                 </span>
-                <ArrowRight className="h-5 w-5 shrink-0 text-muted transition-transform group-open:rotate-90" />
+                <span className="flex-1">{item.question}</span>
+                <ChevronDown className="h-4 w-4 shrink-0 text-fg-secondary transition-transform group-open:rotate-180" />
               </summary>
               <div className="border-t border-border px-4 py-4">
-                <p className="text-base leading-relaxed">
-                  <span className="font-bold text-accent">A.</span>{" "}
-                  {item.answer}
-                </p>
+                <div className="flex gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-xs font-extrabold text-emerald-600">
+                    A
+                  </span>
+                  <p className="text-sm text-fg-secondary leading-relaxed">
+                    {item.answer}
+                  </p>
+                </div>
               </div>
             </details>
           ))}
         </div>
       </section>
 
-      {/* Municipality info */}
-      <section aria-labelledby="municipality-heading" className="mb-10">
+      {/* ====== Municipality info ====== */}
+      <section aria-labelledby="municipality-heading" className="mb-12">
         <h2
           id="municipality-heading"
-          className="mb-4 flex items-center gap-2 text-xl font-bold"
+          className="mb-4 flex items-center gap-2 text-lg font-extrabold text-fg"
         >
           <MapPin className="h-5 w-5 text-accent" />
-          自治体別の窓口（一部抜粋）
+          自治体別の窓口
         </h2>
-        <p className="mb-4 text-base text-muted">
+        <p className="mb-5 text-sm text-fg-secondary">
           お住まいの市区町村の「福祉事務所」が窓口です。
-          「○○市 福祉事務所」「○○区 生活保護」で検索してください。
+          「○○市 福祉事務所」で検索してください。
         </p>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="stagger grid gap-3 sm:grid-cols-2">
           {municipalities.map((area) => (
-            <div
-              key={area.region}
-              className="rounded-lg border border-border p-4"
-            >
-              <p className="mb-2 text-lg font-bold">{area.region}</p>
-              <ul className="space-y-1 text-base">
+            <div key={area.region} className="card p-4">
+              <p className="mb-2 flex items-center gap-2 text-base font-bold text-fg">
+                <MapPin className="h-4 w-4 text-accent" />
+                {area.region}
+              </p>
+              <ul className="space-y-1.5">
                 {area.examples.map((name) => (
-                  <li key={name} className="flex items-start gap-2">
-                    <MapPin className="mt-1 h-4 w-4 shrink-0 text-muted" />
-                    <span>{name}</span>
+                  <li
+                    key={name}
+                    className="text-sm text-fg-secondary pl-6"
+                  >
+                    {name}
                   </li>
                 ))}
               </ul>
@@ -320,38 +320,28 @@ export default function SeikatsuHogoPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <div className="rounded-lg border-2 border-danger bg-red-50 p-5">
+      {/* ====== CTA ====== */}
+      <div className="anim-up overflow-hidden rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 p-6 text-white">
         <div className="flex items-start gap-3">
-          <Phone className="mt-0.5 h-6 w-6 shrink-0 text-danger" />
+          <Phone className="mt-0.5 h-6 w-6 shrink-0" />
           <div>
-            <p className="text-lg font-bold text-danger">
-              困ったらまず電話を
-            </p>
-            <ul className="mt-2 space-y-2 text-base">
+            <p className="text-lg font-bold">困ったらまず電話を</p>
+            <ul className="mt-3 space-y-2 text-sm">
               <li>
                 よりそいホットライン：{" "}
-                <a
-                  href="tel:0120-279-338"
-                  className="font-bold text-danger underline"
-                >
+                <a href="tel:0120-279-338" className="font-bold text-white underline">
                   0120-279-338
                 </a>
                 （24時間・無料）
               </li>
               <li>
                 法テラス：{" "}
-                <a
-                  href="tel:0570-078374"
-                  className="font-bold text-accent underline"
-                >
+                <a href="tel:0570-078374" className="font-bold text-white underline">
                   0570-078374
                 </a>
                 （平日9:00-21:00 / 土曜9:00-17:00）
               </li>
-              <li>
-                生活困窮者自立支援窓口：お住まいの市区町村に設置されています
-              </li>
+              <li>生活困窮者自立支援窓口：お住まいの市区町村に設置</li>
             </ul>
           </div>
         </div>

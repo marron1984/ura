@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Clock, Tag, ArrowRight, Newspaper, Filter } from "lucide-react";
+import { Clock, Tag, Newspaper, Info } from "lucide-react";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { JsonLd } from "@/components/JsonLd";
 import {
@@ -131,13 +130,13 @@ const newsItems: NewsItem[] = [
 ];
 
 const categoryColors: Record<NewsCategory, string> = {
-  給付金: "bg-blue-100 text-blue-800",
-  生活保護: "bg-purple-100 text-purple-800",
-  貸付制度: "bg-green-100 text-green-800",
-  支援情報: "bg-teal-100 text-teal-800",
-  注意喚起: "bg-red-100 text-red-800",
-  法改正: "bg-indigo-100 text-indigo-800",
-  統計: "bg-gray-100 text-gray-800",
+  給付金: "bg-blue-500/10 text-blue-600",
+  生活保護: "bg-purple-500/10 text-purple-600",
+  貸付制度: "bg-emerald-500/10 text-emerald-600",
+  支援情報: "bg-teal-500/10 text-teal-600",
+  注意喚起: "bg-red-500/10 text-red-600",
+  法改正: "bg-indigo-500/10 text-indigo-600",
+  統計: "bg-gray-500/10 text-gray-600",
 };
 
 const allCategories: NewsCategory[] = [
@@ -175,30 +174,26 @@ export default function NewsPage() {
 
       <Breadcrumb items={[{ label: "ニュース" }]} />
 
-      <h1 className="mb-2 text-2xl font-bold sm:text-3xl">
-        ニュース一覧
-      </h1>
-      <p className="mb-6 text-lg text-muted">
-        支援制度・給付金・生活保護に関する最新情報をまとめています。
-      </p>
+      {/* Page header */}
+      <div className="mb-8">
+        <h1 className="mb-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
+          <span className="text-gradient">ニュース</span>一覧
+        </h1>
+        <p className="text-base text-fg-secondary">
+          支援制度・給付金・生活保護に関する最新情報をまとめています。
+        </p>
+      </div>
 
-      {/* Category filter (static, CSS-only) */}
+      {/* ====== Category filter chips — horizontal scroll ====== */}
       <section aria-labelledby="filter-heading" className="mb-8">
-        <h2
-          id="filter-heading"
-          className="sr-only"
-        >
+        <h2 id="filter-heading" className="sr-only">
           カテゴリーで絞り込み
         </h2>
-        <div className="flex items-center gap-2 mb-3">
-          <Filter className="h-4 w-4 text-muted" />
-          <span className="text-sm font-medium text-muted">カテゴリー：</span>
-        </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-none">
           {allCategories.map((cat) => (
             <span
               key={cat}
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium ${categoryColors[cat]}`}
+              className={`pill shrink-0 ${categoryColors[cat]}`}
             >
               <Tag className="h-3 w-3" />
               {cat}
@@ -207,52 +202,55 @@ export default function NewsPage() {
         </div>
       </section>
 
-      {/* News list */}
+      {/* ====== News feed — card-based ====== */}
       <section aria-labelledby="news-list-heading">
         <h2 id="news-list-heading" className="sr-only">
           ニュース記事一覧
         </h2>
-        <div className="space-y-4">
+        <div className="stagger space-y-4">
           {newsItems.map((item) => (
-            <article
-              key={item.id}
-              className="rounded-lg border border-border p-4 hover:bg-gray-50"
-            >
-              <div className="mb-2 flex flex-wrap items-center gap-2">
+            <article key={item.id} className="card overflow-hidden">
+              {/* Category + meta bar */}
+              <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-2.5">
                 <span
-                  className={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-bold ${categoryColors[item.category]}`}
+                  className={`pill text-xs ${categoryColors[item.category]}`}
                 >
                   {item.category}
                 </span>
                 <time
                   dateTime={item.date}
-                  className="flex items-center gap-1 text-sm text-muted"
+                  className="flex items-center gap-1 text-xs text-fg-secondary"
                 >
                   <Clock className="h-3 w-3" />
                   {item.date}
                 </time>
-                <span className="text-sm text-muted">
-                  — {item.source}
+                <span className="text-xs text-fg-secondary/60">
+                  {item.source}
                 </span>
               </div>
-              <h3 className="text-lg font-bold leading-snug">
-                {item.title}
-              </h3>
-              <p className="mt-2 text-base leading-relaxed text-foreground">
-                {item.summary}
-              </p>
+              {/* Content */}
+              <div className="px-4 py-4">
+                <h3 className="text-base font-bold text-fg leading-snug">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-sm text-fg-secondary leading-relaxed">
+                  {item.summary}
+                </p>
+              </div>
             </article>
           ))}
         </div>
       </section>
 
-      {/* Info note */}
-      <div className="mt-10 rounded-lg border border-border bg-gray-50 p-5">
+      {/* ====== Source note ====== */}
+      <div className="anim-up mt-10 card-glow p-5">
         <div className="flex items-start gap-3">
-          <Newspaper className="mt-0.5 h-5 w-5 shrink-0 text-muted" />
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-light">
+            <Info className="h-4 w-4 text-accent" />
+          </div>
           <div>
-            <p className="text-base font-bold">ニュースソースについて</p>
-            <p className="mt-1 text-sm text-muted leading-relaxed">
+            <p className="text-sm font-bold text-fg">ニュースソースについて</p>
+            <p className="mt-1 text-xs text-fg-secondary leading-relaxed">
               当サイトのニュースは、厚生労働省、内閣府、各自治体の公式発表、
               および信頼できる報道機関の情報をもとに編集部がまとめたものです。
               最新・正確な情報は各公式サイトをご確認ください。

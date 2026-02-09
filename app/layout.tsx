@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { BottomNav } from "@/components/BottomNav";
+import { FAB } from "@/components/FAB";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -25,7 +27,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0057b7",
+  themeColor: "#6366f1",
 };
 
 export default function RootLayout({
@@ -37,8 +39,10 @@ export default function RootLayout({
     <html lang="ja">
       <body className="antialiased">
         <Header />
-        <main className="mx-auto max-w-4xl px-4 py-6">{children}</main>
+        <main className="mx-auto max-w-3xl px-4 py-6">{children}</main>
         <Footer />
+        <FAB />
+        <BottomNav />
       </body>
     </html>
   );
