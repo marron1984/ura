@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --accent: #0057b7;
+  --accent-light: #e8f0fe;
+  --border: #d1d5db;
+  --muted: #6b7280;
+  --danger: #dc2626;
+  --warning: #f59e0b;
+  --success: #16a34a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+  font-size: 18px;
+  line-height: 1.8;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* High contrast links */
+a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+/* Large tap targets for mobile */
+a, button {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
