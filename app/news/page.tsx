@@ -6,6 +6,7 @@ import {
   generateArticleJsonLd,
   generateBreadcrumbJsonLd,
 } from "@/lib/jsonld";
+import { Reveal, Tilt3D, Marquee } from "@/components/Motion";
 
 export const metadata: Metadata = {
   title: "ニュース一覧｜支援制度の最新情報",
@@ -175,89 +176,97 @@ export default function NewsPage() {
       <Breadcrumb items={[{ label: "ニュース" }]} />
 
       {/* Page header */}
-      <div className="mb-8">
-        <h1 className="mb-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
-          <span className="text-gradient">ニュース</span>一覧
-        </h1>
-        <p className="text-base text-fg-secondary">
-          支援制度・給付金・生活保護に関する最新情報をまとめています。
-        </p>
-      </div>
+      <Reveal>
+        <div className="mb-8">
+          <h1 className="mb-2 text-2xl font-black tracking-tight sm:text-3xl">
+            <span className="text-gradient">ニュース</span>一覧
+          </h1>
+          <p className="text-base text-fg-secondary">
+            支援制度・給付金・生活保護に関する最新情報をまとめています。
+          </p>
+        </div>
+      </Reveal>
 
-      {/* ====== Category filter chips — horizontal scroll ====== */}
+      {/* ====== Category filter chips — marquee ticker ====== */}
       <section aria-labelledby="filter-heading" className="mb-8">
         <h2 id="filter-heading" className="sr-only">
           カテゴリーで絞り込み
         </h2>
-        <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-none">
+        <Marquee speed={25}>
           {allCategories.map((cat) => (
             <span
               key={cat}
-              className={`pill shrink-0 ${categoryColors[cat]}`}
+              className={`pill spring-hover shrink-0 ${categoryColors[cat]}`}
             >
               <Tag className="h-3 w-3" />
               {cat}
             </span>
           ))}
-        </div>
+        </Marquee>
       </section>
 
-      {/* ====== News feed — card-based ====== */}
+      {/* ====== News feed — card-based with Tilt3D ====== */}
       <section aria-labelledby="news-list-heading">
         <h2 id="news-list-heading" className="sr-only">
           ニュース記事一覧
         </h2>
-        <div className="stagger space-y-4">
-          {newsItems.map((item) => (
-            <article key={item.id} className="card overflow-hidden">
-              {/* Category + meta bar */}
-              <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-2.5">
-                <span
-                  className={`pill text-xs ${categoryColors[item.category]}`}
-                >
-                  {item.category}
-                </span>
-                <time
-                  dateTime={item.date}
-                  className="flex items-center gap-1 text-xs text-fg-secondary"
-                >
-                  <Clock className="h-3 w-3" />
-                  {item.date}
-                </time>
-                <span className="text-xs text-fg-secondary/60">
-                  {item.source}
-                </span>
-              </div>
-              {/* Content */}
-              <div className="px-4 py-4">
-                <h3 className="text-base font-bold text-fg leading-snug">
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-sm text-fg-secondary leading-relaxed">
-                  {item.summary}
-                </p>
-              </div>
-            </article>
+        <div className="space-y-4">
+          {newsItems.map((item, i) => (
+            <Reveal key={item.id} delay={i * 60}>
+              <Tilt3D intensity={4}>
+                <article className="card hover-glow overflow-hidden">
+                  {/* Category + meta bar */}
+                  <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-2.5">
+                    <span
+                      className={`pill text-xs ${categoryColors[item.category]}`}
+                    >
+                      {item.category}
+                    </span>
+                    <time
+                      dateTime={item.date}
+                      className="flex items-center gap-1 text-xs text-fg-secondary"
+                    >
+                      <Clock className="h-3 w-3" />
+                      {item.date}
+                    </time>
+                    <span className="text-xs text-fg-secondary/60">
+                      {item.source}
+                    </span>
+                  </div>
+                  {/* Content */}
+                  <div className="px-4 py-4">
+                    <h3 className="text-base font-bold text-fg leading-snug">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-fg-secondary leading-relaxed">
+                      {item.summary}
+                    </p>
+                  </div>
+                </article>
+              </Tilt3D>
+            </Reveal>
           ))}
         </div>
       </section>
 
       {/* ====== Source note ====== */}
-      <div className="anim-up mt-10 card-glow p-5">
-        <div className="flex items-start gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-light">
-            <Info className="h-4 w-4 text-accent" />
-          </div>
-          <div>
-            <p className="text-sm font-bold text-fg">ニュースソースについて</p>
-            <p className="mt-1 text-xs text-fg-secondary leading-relaxed">
-              当サイトのニュースは、厚生労働省、内閣府、各自治体の公式発表、
-              および信頼できる報道機関の情報をもとに編集部がまとめたものです。
-              最新・正確な情報は各公式サイトをご確認ください。
-            </p>
+      <Reveal>
+        <div className="mt-10 card-glow p-5">
+          <div className="flex items-start gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-light">
+              <Info className="h-4 w-4 text-accent" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-fg">ニュースソースについて</p>
+              <p className="mt-1 text-xs text-fg-secondary leading-relaxed">
+                当サイトのニュースは、厚生労働省、内閣府、各自治体の公式発表、
+                および信頼できる報道機関の情報をもとに編集部がまとめたものです。
+                最新・正確な情報は各公式サイトをご確認ください。
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </>
   );
 }

@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BottomNav } from "@/components/BottomNav";
 import { FAB } from "@/components/FAB";
+import { ReadingProgress } from "@/components/Motion";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className="antialiased">
+        <ReadingProgress />
         <Header />
         <main className="mx-auto max-w-3xl px-4 py-6">{children}</main>
         <Footer />
