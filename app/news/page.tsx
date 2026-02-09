@@ -6,7 +6,15 @@ import {
   generateArticleJsonLd,
   generateBreadcrumbJsonLd,
 } from "@/lib/jsonld";
-import { Reveal, Tilt3D, Marquee } from "@/components/Motion";
+import {
+  Reveal,
+  SplitText,
+  Tilt3D,
+  Marquee,
+  MaskReveal,
+  ScrollVelocity,
+  GlowCard,
+} from "@/components/Motion";
 
 export const metadata: Metadata = {
   title: "ニュース一覧｜支援制度の最新情報",
@@ -176,45 +184,47 @@ export default function NewsPage() {
       <Breadcrumb items={[{ label: "ニュース" }]} />
 
       {/* Page header */}
-      <Reveal>
+      <MaskReveal direction="left">
         <div className="mb-8">
           <h1 className="mb-2 text-2xl font-black tracking-tight sm:text-3xl">
-            <span className="text-gradient">ニュース</span>一覧
+            <SplitText text="ニュース一覧" stagger={50} className="text-gradient" />
           </h1>
           <p className="text-base text-fg-secondary">
             支援制度・給付金・生活保護に関する最新情報をまとめています。
           </p>
         </div>
-      </Reveal>
+      </MaskReveal>
 
-      {/* ====== Category filter chips — marquee ticker ====== */}
+      {/* ====== Category filter chips — marquee ====== */}
       <section aria-labelledby="filter-heading" className="mb-8">
         <h2 id="filter-heading" className="sr-only">
           カテゴリーで絞り込み
         </h2>
-        <Marquee speed={25}>
-          {allCategories.map((cat) => (
-            <span
-              key={cat}
-              className={`pill spring-hover shrink-0 ${categoryColors[cat]}`}
-            >
-              <Tag className="h-3 w-3" />
-              {cat}
-            </span>
-          ))}
-        </Marquee>
+        <ScrollVelocity intensity={0.3}>
+          <Marquee speed={25}>
+            {allCategories.map((cat) => (
+              <span
+                key={cat}
+                className={`pill spring-hover shrink-0 ${categoryColors[cat]}`}
+              >
+                <Tag className="h-3 w-3" />
+                {cat}
+              </span>
+            ))}
+          </Marquee>
+        </ScrollVelocity>
       </section>
 
-      {/* ====== News feed — card-based with Tilt3D ====== */}
+      {/* ====== News feed — card-based with Tilt3D + GlowCard ====== */}
       <section aria-labelledby="news-list-heading">
         <h2 id="news-list-heading" className="sr-only">
           ニュース記事一覧
         </h2>
         <div className="space-y-4">
           {newsItems.map((item, i) => (
-            <Reveal key={item.id} delay={i * 60}>
+            <Reveal key={item.id} delay={i * 60} direction={i % 2 === 0 ? "left" : "right"}>
               <Tilt3D intensity={4}>
-                <article className="card hover-glow overflow-hidden">
+                <GlowCard className="overflow-hidden">
                   {/* Category + meta bar */}
                   <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-2.5">
                     <span
@@ -242,7 +252,7 @@ export default function NewsPage() {
                       {item.summary}
                     </p>
                   </div>
-                </article>
+                </GlowCard>
               </Tilt3D>
             </Reveal>
           ))}
@@ -250,7 +260,7 @@ export default function NewsPage() {
       </section>
 
       {/* ====== Source note ====== */}
-      <Reveal>
+      <MaskReveal direction="up">
         <div className="mt-10 card-glow p-5">
           <div className="flex items-start gap-3">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-light">
@@ -266,7 +276,7 @@ export default function NewsPage() {
             </div>
           </div>
         </div>
-      </Reveal>
+      </MaskReveal>
     </>
   );
 }

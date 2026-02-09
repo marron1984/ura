@@ -16,7 +16,15 @@ import {
   generateFAQJsonLd,
   generateBreadcrumbJsonLd,
 } from "@/lib/jsonld";
-import { Reveal, Tilt3D, CountUp } from "@/components/Motion";
+import {
+  Reveal,
+  SplitText,
+  Tilt3D,
+  CountUp,
+  MaskReveal,
+  StaggerChildren,
+  GlowCard,
+} from "@/components/Motion";
 
 export const metadata: Metadata = {
   title: "生活保護ガイド｜申請方法・受給条件・Q&A",
@@ -86,38 +94,36 @@ export default function SeikatsuHogoPage() {
 
       <Breadcrumb items={[{ label: "生活保護ガイド" }]} />
 
-      <Reveal>
+      <MaskReveal direction="left">
         <div className="mb-8">
           <h1 className="mb-2 text-2xl font-black tracking-tight sm:text-3xl">
-            <span className="text-gradient">生活保護</span>ガイド
+            <SplitText text="生活保護ガイド" stagger={50} className="text-gradient" />
           </h1>
           <p className="text-base text-fg-secondary">
             生活保護は「最後のセーフティネット」です。誰でも申請する権利があります。
           </p>
         </div>
-      </Reveal>
+      </MaskReveal>
 
       {/* Key stats */}
-      <Reveal>
-        <div className="mb-10 grid grid-cols-2 gap-3">
-          <div className="card p-4 text-center">
-            <p className="text-3xl font-black text-gradient">
-              <CountUp end={14} suffix="日" />
-            </p>
-            <p className="mt-1 text-xs text-fg-secondary">原則の審査期間</p>
-          </div>
-          <div className="card p-4 text-center">
-            <p className="text-3xl font-black text-gradient">
-              <CountUp end={0} suffix="円" />
-            </p>
-            <p className="mt-1 text-xs text-fg-secondary">申請にかかる費用</p>
-          </div>
-        </div>
-      </Reveal>
+      <StaggerChildren className="mb-10 grid grid-cols-2 gap-3" stagger={150}>
+        <GlowCard className="p-4 text-center">
+          <p className="text-3xl font-black text-gradient">
+            <CountUp end={14} suffix="日" />
+          </p>
+          <p className="mt-1 text-xs text-fg-secondary">原則の審査期間</p>
+        </GlowCard>
+        <GlowCard className="p-4 text-center">
+          <p className="text-3xl font-black text-gradient">
+            <CountUp end={0} suffix="円" />
+          </p>
+          <p className="mt-1 text-xs text-fg-secondary">申請にかかる費用</p>
+        </GlowCard>
+      </StaggerChildren>
 
       {/* Key message */}
       <Reveal>
-        <Tilt3D intensity={5}>
+        <Tilt3D intensity={6}>
           <div className="card-glow mb-10 p-5">
             <div className="flex items-start gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-md">
@@ -139,12 +145,12 @@ export default function SeikatsuHogoPage() {
         <Reveal>
           <h2 id="steps-heading" className="mb-5 flex items-center gap-2 text-lg font-extrabold text-fg">
             <FileText className="h-5 w-5 text-accent" />
-            申請の流れ（5ステップ）
+            <SplitText text="申請の流れ（5ステップ）" stagger={30} />
           </h2>
         </Reveal>
         <ol className="relative ml-4 space-y-6 border-l-2 border-accent/20 pl-6">
           {applicationSteps.map((item, i) => (
-            <Reveal key={item.step} delay={i * 100}>
+            <Reveal key={item.step} delay={i * 120} direction={i % 2 === 0 ? "left" : "right"}>
               <li className="relative">
                 <span className="absolute -left-[33px] flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-xs font-bold text-white shadow-lg">
                   {item.step}
@@ -160,10 +166,10 @@ export default function SeikatsuHogoPage() {
       </section>
 
       {/* Rejection warning */}
-      <Reveal>
+      <MaskReveal direction="up">
         <div className="mb-14 overflow-hidden rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50">
-          <div className="bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-3">
-            <p className="flex items-center gap-2 text-base font-bold text-white">
+          <div className="bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-3 hero-shimmer-line relative overflow-hidden">
+            <p className="relative z-10 flex items-center gap-2 text-base font-bold text-white">
               <AlertTriangle className="h-5 w-5 shake-hover" />
               窓口で断られた場合（水際作戦）
             </p>
@@ -174,21 +180,25 @@ export default function SeikatsuHogoPage() {
             </p>
             <ul className="space-y-3">
               {["「申請します」と明確に意思表示する（書面で渡すとより確実）", "やりとりを録音する（スマホの録音アプリでOK）", "支援団体に同行を依頼する（つくろい東京ファンド、NPO法人もやいなど）"].map((text, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm">
-                  <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
-                  <span className="text-fg">{text}</span>
-                </li>
+                <Reveal key={i} delay={i * 80} direction="left">
+                  <li className="flex items-start gap-2.5 text-sm">
+                    <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+                    <span className="text-fg">{text}</span>
+                  </li>
+                </Reveal>
               ))}
-              <li className="flex items-start gap-2.5 text-sm">
-                <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
-                <span className="text-fg">
-                  法テラス（<a href="tel:0570-078374" className="font-bold text-accent underline">0570-078374</a>）に相談する
-                </span>
-              </li>
+              <Reveal delay={240} direction="left">
+                <li className="flex items-start gap-2.5 text-sm">
+                  <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+                  <span className="text-fg">
+                    法テラス（<a href="tel:0570-078374" className="font-bold text-accent underline">0570-078374</a>）に相談する
+                  </span>
+                </li>
+              </Reveal>
             </ul>
           </div>
         </div>
-      </Reveal>
+      </MaskReveal>
 
       {/* FAQ */}
       <section aria-labelledby="faq-heading" className="mb-14">
@@ -200,12 +210,12 @@ export default function SeikatsuHogoPage() {
         </Reveal>
         <div className="space-y-3">
           {faqItems.map((item, i) => (
-            <Reveal key={i} delay={i * 60}>
-              <details className="group card overflow-hidden">
+            <Reveal key={i} delay={i * 70}>
+              <details className="group card overflow-hidden hover-expand">
                 <summary className="flex cursor-pointer items-center gap-3 px-4 py-4 text-sm font-bold text-fg transition-colors hover:bg-accent-light [&::-webkit-details-marker]:hidden list-none">
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent-light text-xs font-extrabold text-accent">Q</span>
                   <span className="flex-1">{item.question}</span>
-                  <ChevronDown className="h-4 w-4 shrink-0 text-fg-secondary transition-transform duration-300 group-open:rotate-180" />
+                  <ChevronDown className="h-4 w-4 shrink-0 text-fg-secondary transition-transform duration-500 group-open:rotate-180" />
                 </summary>
                 <div className="border-t border-border px-4 py-4">
                   <div className="flex gap-3">
@@ -230,29 +240,27 @@ export default function SeikatsuHogoPage() {
             お住まいの市区町村の「福祉事務所」が窓口です。「○○市 福祉事務所」で検索してください。
           </p>
         </Reveal>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {municipalities.map((area, i) => (
-            <Reveal key={area.region} delay={i * 80}>
-              <div className="card spring-hover p-4">
-                <p className="mb-2 flex items-center gap-2 text-base font-bold text-fg">
-                  <MapPin className="h-4 w-4 text-accent" />
-                  {area.region}
-                </p>
-                <ul className="space-y-1.5">
-                  {area.examples.map((name) => (
-                    <li key={name} className="text-sm text-fg-secondary pl-6">{name}</li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
+        <StaggerChildren className="grid gap-3 sm:grid-cols-2" stagger={100}>
+          {municipalities.map((area) => (
+            <GlowCard key={area.region} className="p-4 spring-hover">
+              <p className="mb-2 flex items-center gap-2 text-base font-bold text-fg">
+                <MapPin className="h-4 w-4 text-accent" />
+                {area.region}
+              </p>
+              <ul className="space-y-1.5">
+                {area.examples.map((name) => (
+                  <li key={name} className="text-sm text-fg-secondary pl-6">{name}</li>
+                ))}
+              </ul>
+            </GlowCard>
           ))}
-        </div>
+        </StaggerChildren>
       </section>
 
       {/* CTA */}
-      <Reveal>
-        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 p-6 text-white">
-          <div className="flex items-start gap-3">
+      <MaskReveal direction="up">
+        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 p-6 text-white hero-shimmer-line relative">
+          <div className="relative z-10 flex items-start gap-3">
             <Phone className="mt-0.5 h-6 w-6 shrink-0" />
             <div>
               <p className="text-lg font-bold">困ったらまず電話を</p>
@@ -264,7 +272,7 @@ export default function SeikatsuHogoPage() {
             </div>
           </div>
         </div>
-      </Reveal>
+      </MaskReveal>
     </>
   );
 }

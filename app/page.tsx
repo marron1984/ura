@@ -18,12 +18,19 @@ import { JsonLd } from "@/components/JsonLd";
 import { generateWebSiteJsonLd } from "@/lib/jsonld";
 import {
   Reveal,
+  SplitText,
+  TextScramble,
   Tilt3D,
   Typewriter,
   Marquee,
   CountUp,
   Magnetic,
   ParallaxLayer,
+  MaskReveal,
+  FloatingOrb,
+  ScrollVelocity,
+  StaggerChildren,
+  GlowCard,
 } from "@/components/Motion";
 
 const latestNews = [
@@ -113,30 +120,50 @@ export default function HomePage() {
     <>
       <JsonLd data={generateWebSiteJsonLd()} />
 
-      {/* ====== Hero section ====== */}
-      <section className="relative mb-12 overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 px-6 py-12 text-white sm:py-16">
-        {/* Morphing blob orbs */}
-        <div className="morph-blob hero-glow -left-20 -top-20 bg-white/20" />
-        <div
-          className="morph-blob hero-glow -bottom-16 -right-16 bg-pink-300/25"
-          style={{ animationDelay: "4s" }}
+      {/* ====== Hero section — immersive ====== */}
+      <section className="relative mb-14 overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 px-6 py-14 text-white sm:py-20 hero-shimmer-line">
+        {/* Living background orbs */}
+        <FloatingOrb
+          className="-left-24 -top-24"
+          color="rgba(255,255,255,0.15)"
+          size={350}
+          delay={0}
         />
-        <ParallaxLayer speed={0.15} className="absolute inset-0 pointer-events-none">
-          <div className="morph-blob absolute right-1/4 top-1/3 h-40 w-40 bg-cyan-400/10 blur-3xl" />
+        <FloatingOrb
+          className="-bottom-20 -right-20"
+          color="rgba(236,72,153,0.2)"
+          size={300}
+          delay={3}
+        />
+        <ParallaxLayer speed={0.2} className="absolute inset-0 pointer-events-none">
+          <FloatingOrb
+            className="right-1/4 top-1/3"
+            color="rgba(6,182,212,0.12)"
+            size={200}
+            delay={5}
+          />
         </ParallaxLayer>
 
         <div className="relative z-10">
-          <div className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3.5 py-1.5 text-xs font-semibold backdrop-blur-md">
-            <Sparkles className="h-3 w-3" />
-            生活に困ったときの総合情報サイト
-          </div>
+          <MaskReveal direction="left">
+            <div className="mb-5 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-2 text-xs font-semibold backdrop-blur-md">
+              <Sparkles className="h-3.5 w-3.5" />
+              生活に困ったときの総合情報サイト
+            </div>
+          </MaskReveal>
 
           <h1 className="mb-1 text-3xl font-black leading-tight tracking-tight sm:text-5xl">
-            あなたの「困った」に
+            <SplitText text="あなたの「困った」に" stagger={40} />
           </h1>
-          <div className="mb-4 text-3xl font-black leading-tight tracking-tight sm:text-5xl">
+          <div className="mb-2 text-3xl font-black leading-tight tracking-tight sm:text-5xl">
             <Typewriter
               texts={["答えを届ける", "寄り添う", "道を照らす"]}
+            />
+          </div>
+          <div className="mb-8 text-sm text-white/50 font-mono">
+            <TextScramble
+              texts={["SEIKATSU SHIEN NAVI", "生活支援ナビゲーション", "YOUR SAFETY NET"]}
+              speed={40}
             />
           </div>
 
@@ -144,41 +171,36 @@ export default function HomePage() {
             生活保護・給付金・支援制度の情報を、分かりやすくまとめました。
           </p>
 
-          {/* Emergency CTA with magnetic effect */}
-          <Magnetic strength={0.15}>
+          {/* Emergency CTA with magnetic + spring */}
+          <Magnetic strength={0.2}>
             <a
               href="tel:0120-279-338"
-              className="spring-hover inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-base font-bold text-red-600 shadow-xl no-underline"
+              className="spring-hover inline-flex items-center gap-2 rounded-full bg-white px-7 py-4 text-base font-bold text-red-600 shadow-xl no-underline"
             >
               <Phone className="h-5 w-5" />
               今すぐ無料相談 0120-279-338
             </a>
           </Magnetic>
-          <p className="mt-2.5 text-xs text-white/50">
+          <p className="mt-3 text-xs text-white/40">
             よりそいホットライン（24時間・無料）
           </p>
         </div>
       </section>
 
-      {/* ====== Stats counter ====== */}
-      <Reveal>
-        <section className="mb-12 grid grid-cols-3 gap-3">
-          {stats.map((s) => (
-            <div
-              key={s.label}
-              className="card p-4 text-center"
-            >
-              <s.icon className="mx-auto mb-2 h-5 w-5 text-accent" />
-              <p className="text-2xl font-black text-gradient sm:text-3xl">
-                <CountUp end={s.value} suffix={s.suffix} />
-              </p>
-              <p className="mt-1 text-xs text-fg-secondary">{s.label}</p>
-            </div>
-          ))}
-        </section>
-      </Reveal>
+      {/* ====== Stats counter — staggered entry ====== */}
+      <StaggerChildren className="mb-14 grid grid-cols-3 gap-3" stagger={120}>
+        {stats.map((s) => (
+          <GlowCard key={s.label} className="p-4 text-center">
+            <s.icon className="mx-auto mb-2 h-5 w-5 text-accent" />
+            <p className="text-2xl font-black text-gradient sm:text-3xl">
+              <CountUp end={s.value} suffix={s.suffix} />
+            </p>
+            <p className="mt-1 text-xs text-fg-secondary">{s.label}</p>
+          </GlowCard>
+        ))}
+      </StaggerChildren>
 
-      {/* ====== Category cards — 3D tilt ====== */}
+      {/* ====== Category cards — 3D tilt + glow ====== */}
       <section aria-labelledby="categories-heading" className="mb-14">
         <Reveal>
           <h2
@@ -186,24 +208,24 @@ export default function HomePage() {
             className="mb-5 flex items-center gap-2 text-lg font-extrabold text-fg"
           >
             <Zap className="h-5 w-5 text-accent" />
-            カテゴリーから探す
+            <SplitText text="カテゴリーから探す" stagger={35} />
           </h2>
         </Reveal>
         <div className="grid gap-4 sm:grid-cols-3">
           {categories.map((cat, i) => (
-            <Reveal key={cat.href} delay={i * 80}>
-              <Tilt3D intensity={10}>
+            <Reveal key={cat.href} delay={i * 100} direction={i === 0 ? "left" : i === 2 ? "right" : "up"}>
+              <Tilt3D intensity={12}>
                 <Link
                   href={cat.href}
                   className="card hover-glow group relative block overflow-hidden p-5 no-underline"
                   style={{ transformStyle: "preserve-3d" }}
                 >
                   <div
-                    className={`absolute -right-6 -top-6 h-28 w-28 rounded-full ${cat.bgGlow} blur-2xl transition-all duration-500 group-hover:scale-[2]`}
+                    className={`absolute -right-6 -top-6 h-32 w-32 rounded-full ${cat.bgGlow} blur-2xl transition-all duration-700 group-hover:scale-[2.5] group-hover:opacity-80`}
                   />
-                  <div className="relative" style={{ transform: "translateZ(30px)" }}>
+                  <div className="relative" style={{ transform: "translateZ(40px)" }}>
                     <div
-                      className={`mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${cat.gradient} text-white shadow-md`}
+                      className={`mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${cat.gradient} text-white shadow-lg`}
                     >
                       <cat.icon className="h-5 w-5" />
                     </div>
@@ -213,7 +235,7 @@ export default function HomePage() {
                     </p>
                     <div className="mt-3 flex items-center gap-1 text-sm font-semibold text-accent">
                       詳しく見る
-                      <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5" />
+                      <ChevronRight className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-2" />
                     </div>
                   </div>
                 </Link>
@@ -223,7 +245,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ====== Trend ticker — marquee ====== */}
+      {/* ====== Trend ticker — velocity-reactive marquee ====== */}
       <Reveal>
         <section aria-labelledby="trend-heading" className="mb-14">
           <h2
@@ -233,16 +255,18 @@ export default function HomePage() {
             <TrendingUp className="h-5 w-5 text-accent" />
             注目のトピック
           </h2>
-          <Marquee speed={35}>
-            {trendTopics.map((topic) => (
-              <span
-                key={topic}
-                className="pill spring-hover shrink-0 cursor-default border border-border bg-bg-card text-fg"
-              >
-                {topic}
-              </span>
-            ))}
-          </Marquee>
+          <ScrollVelocity intensity={0.5}>
+            <Marquee speed={35}>
+              {trendTopics.map((topic) => (
+                <span
+                  key={topic}
+                  className="pill spring-hover shrink-0 cursor-default border border-border bg-bg-card text-fg"
+                >
+                  {topic}
+                </span>
+              ))}
+            </Marquee>
+          </ScrollVelocity>
         </section>
       </Reveal>
 
@@ -257,21 +281,23 @@ export default function HomePage() {
               <Clock className="h-5 w-5 text-accent" />
               最新ニュース
             </h2>
-            <Link
-              href="/news"
-              className="spring-hover flex items-center gap-1 rounded-full bg-accent-light px-3 py-1.5 text-sm font-semibold text-accent no-underline"
-            >
-              すべて見る
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+            <Magnetic strength={0.2}>
+              <Link
+                href="/news"
+                className="spring-hover flex items-center gap-1 rounded-full bg-accent-light px-3 py-1.5 text-sm font-semibold text-accent no-underline"
+              >
+                すべて見る
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Magnetic>
           </div>
         </Reveal>
         <div className="space-y-3">
           {latestNews.map((item, i) => (
-            <Reveal key={item.id} delay={i * 60}>
+            <Reveal key={item.id} delay={i * 70} direction={i % 2 === 0 ? "left" : "right"}>
               <Link
                 href={item.href}
-                className="card card-interactive flex items-start gap-3 p-4 no-underline"
+                className="card hover-expand flex items-start gap-3 p-4 no-underline"
               >
                 <div className="shrink-0 pt-0.5">
                   <span className="pill bg-accent-light text-accent text-xs">
@@ -296,8 +322,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ====== About ====== */}
-      <Reveal>
+      {/* ====== About — mask reveal ====== */}
+      <MaskReveal direction="up">
         <section
           aria-labelledby="about-heading"
           className="card-glow p-6"
@@ -316,7 +342,7 @@ export default function HomePage() {
             分かりやすくまとめています。
           </p>
         </section>
-      </Reveal>
+      </MaskReveal>
     </>
   );
 }

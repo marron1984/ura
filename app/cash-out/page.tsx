@@ -18,7 +18,16 @@ import {
   generateFAQJsonLd,
   generateBreadcrumbJsonLd,
 } from "@/lib/jsonld";
-import { Reveal, Tilt3D, CountUp } from "@/components/Motion";
+import {
+  Reveal,
+  SplitText,
+  Tilt3D,
+  CountUp,
+  MaskReveal,
+  StaggerChildren,
+  GlowCard,
+  ScrollVelocity,
+} from "@/components/Motion";
 
 export const metadata: Metadata = {
   title: "後払い・現金化のリスクと実態",
@@ -69,39 +78,37 @@ export default function CashOutPage() {
 
       <Breadcrumb items={[{ label: "現金化の実態" }]} />
 
-      <Reveal>
+      <MaskReveal direction="left">
         <div className="mb-8">
           <h1 className="mb-2 text-2xl font-black tracking-tight sm:text-3xl">
-            後払い・<span className="text-gradient">現金化</span>のリスクと実態
+            後払い・<SplitText text="現金化のリスク" stagger={45} className="text-gradient" />と実態
           </h1>
           <p className="text-base text-fg-secondary">
             「即日現金」「審査なし」——甘い言葉の裏にある危険を知ってください。
           </p>
         </div>
-      </Reveal>
+      </MaskReveal>
 
       {/* Shock stats */}
-      <Reveal>
-        <div className="mb-10 grid grid-cols-3 gap-3">
-          <div className="card p-3 text-center">
-            <p className="text-2xl font-black text-danger sm:text-3xl"><CountUp end={200} suffix="%" /></p>
-            <p className="mt-1 text-[10px] text-fg-secondary leading-tight">実質年利（最低ライン）</p>
-          </div>
-          <div className="card p-3 text-center">
-            <p className="text-2xl font-black text-danger sm:text-3xl"><CountUp end={2} suffix="倍" /></p>
-            <p className="mt-1 text-[10px] text-fg-secondary leading-tight">相談件数（前年比）</p>
-          </div>
-          <div className="card p-3 text-center">
-            <p className="text-2xl font-black text-danger sm:text-3xl"><CountUp end={60} suffix="%" /></p>
-            <p className="mt-1 text-[10px] text-fg-secondary leading-tight">手数料率</p>
-          </div>
-        </div>
-      </Reveal>
+      <StaggerChildren className="mb-10 grid grid-cols-3 gap-3" stagger={120}>
+        <GlowCard className="p-3 text-center" color="var(--danger)">
+          <p className="text-2xl font-black text-danger sm:text-3xl"><CountUp end={200} suffix="%" /></p>
+          <p className="mt-1 text-[10px] text-fg-secondary leading-tight">実質年利（最低ライン）</p>
+        </GlowCard>
+        <GlowCard className="p-3 text-center" color="var(--danger)">
+          <p className="text-2xl font-black text-danger sm:text-3xl"><CountUp end={2} suffix="倍" /></p>
+          <p className="mt-1 text-[10px] text-fg-secondary leading-tight">相談件数（前年比）</p>
+        </GlowCard>
+        <GlowCard className="p-3 text-center" color="var(--danger)">
+          <p className="text-2xl font-black text-danger sm:text-3xl"><CountUp end={60} suffix="%" /></p>
+          <p className="mt-1 text-[10px] text-fg-secondary leading-tight">手数料率</p>
+        </GlowCard>
+      </StaggerChildren>
 
       {/* Warning banner */}
-      <Reveal>
-        <div className="mb-12 overflow-hidden rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 p-6 text-white">
-          <div className="flex items-start gap-3">
+      <MaskReveal direction="up">
+        <div className="mb-12 overflow-hidden rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 p-6 text-white hero-shimmer-line relative">
+          <div className="relative z-10 flex items-start gap-3">
             <ShieldAlert className="mt-0.5 h-6 w-6 shrink-0 shake-hover" />
             <div>
               <p className="text-lg font-bold">現金化サービスは使わないでください</p>
@@ -111,21 +118,21 @@ export default function CashOutPage() {
             </div>
           </div>
         </div>
-      </Reveal>
+      </MaskReveal>
 
       {/* Risk cards */}
       <section aria-labelledby="risks-heading" className="mb-14">
         <Reveal>
           <h2 id="risks-heading" className="mb-5 flex items-center gap-2 text-lg font-extrabold text-fg">
             <Flame className="h-5 w-5 text-amber-500" />
-            主な現金化手口とリスク
+            <SplitText text="主な現金化手口とリスク" stagger={35} />
           </h2>
         </Reveal>
         <div className="space-y-4">
           {risks.map((risk, i) => (
-            <Reveal key={risk.title} delay={i * 80}>
-              <Tilt3D intensity={4}>
-                <div className="card overflow-hidden">
+            <Reveal key={risk.title} delay={i * 90} direction={i % 2 === 0 ? "left" : "right"}>
+              <Tilt3D intensity={5}>
+                <div className="card overflow-hidden hover-glow">
                   <div className="p-4">
                     <div className="mb-2 flex items-center gap-2">
                       <Ban className="h-4 w-4 shrink-0 text-danger" />
@@ -135,7 +142,7 @@ export default function CashOutPage() {
                       </span>
                     </div>
                     <p className="text-sm text-fg-secondary leading-relaxed">{risk.description}</p>
-                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-red-100">
+                    <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-red-100">
                       <div className="bar-fill h-full rounded-full bg-gradient-to-r from-amber-400 via-orange-500 to-red-500" style={{ "--bar-w": `${risk.pct}%` } as React.CSSProperties} />
                     </div>
                   </div>
@@ -154,19 +161,19 @@ export default function CashOutPage() {
             利用するとどうなるか
           </h2>
         </Reveal>
-        <div className="space-y-3">
-          {consequences.map((item, i) => (
-            <Reveal key={i} delay={i * 80}>
-              <div className="card flex items-start gap-3 p-4 spring-hover">
+        <ScrollVelocity intensity={0.3}>
+          <StaggerChildren className="space-y-3" stagger={100}>
+            {consequences.map((item, i) => (
+              <div key={i} className="card flex items-start gap-3 p-4 hover-expand">
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-500 to-rose-500 text-xs font-bold text-white shadow-md">{i + 1}</span>
                 <div>
                   <p className="text-sm font-bold text-fg">{item.label}</p>
                   <p className="mt-0.5 text-sm text-fg-secondary">{item.detail}</p>
                 </div>
               </div>
-            </Reveal>
-          ))}
-        </div>
+            ))}
+          </StaggerChildren>
+        </ScrollVelocity>
       </section>
 
       {/* Alternatives */}
@@ -174,14 +181,14 @@ export default function CashOutPage() {
         <Reveal>
           <h2 id="alternatives-heading" className="mb-5 flex items-center gap-2 text-lg font-extrabold text-fg">
             <ShieldCheck className="h-5 w-5 text-success" />
-            安全な代替手段（公的支援制度）
+            <SplitText text="安全な代替手段" stagger={40} />
           </h2>
           <p className="mb-5 text-sm text-fg-secondary">現金化に頼らなくても、使える制度はたくさんあります。</p>
         </Reveal>
         <div className="space-y-3">
           {alternatives.map((alt, i) => (
-            <Reveal key={alt.title} delay={i * 60}>
-              <div className="card overflow-hidden border-l-4 border-l-emerald-400 p-4 spring-hover">
+            <Reveal key={alt.title} delay={i * 70} direction="left">
+              <div className="card overflow-hidden border-l-4 border-l-emerald-400 p-4 hover-expand">
                 <h3 className="text-base font-bold text-fg">{alt.title}</h3>
                 <p className="mt-1 text-sm text-fg-secondary leading-relaxed">{alt.description}</p>
                 <p className="mt-2 flex items-center gap-1.5 text-sm font-semibold text-emerald-600">
@@ -200,12 +207,12 @@ export default function CashOutPage() {
         <Reveal><h2 id="faq-heading" className="mb-5 flex items-center gap-2 text-lg font-extrabold text-fg">よくある質問</h2></Reveal>
         <div className="space-y-3">
           {faqItems.map((item, i) => (
-            <Reveal key={i} delay={i * 60}>
-              <details className="group card overflow-hidden">
+            <Reveal key={i} delay={i * 70}>
+              <details className="group card overflow-hidden hover-expand">
                 <summary className="flex cursor-pointer items-center gap-3 px-4 py-4 text-sm font-bold text-fg transition-colors hover:bg-accent-light [&::-webkit-details-marker]:hidden list-none">
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent-light text-xs font-extrabold text-accent">Q</span>
                   <span className="flex-1">{item.question}</span>
-                  <ChevronDown className="h-4 w-4 shrink-0 text-fg-secondary transition-transform duration-300 group-open:rotate-180" />
+                  <ChevronDown className="h-4 w-4 shrink-0 text-fg-secondary transition-transform duration-500 group-open:rotate-180" />
                 </summary>
                 <div className="border-t border-border px-4 py-4">
                   <div className="flex gap-3">
@@ -220,9 +227,9 @@ export default function CashOutPage() {
       </section>
 
       {/* CTA */}
-      <Reveal>
-        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 p-6 text-white">
-          <div className="flex items-start gap-3">
+      <MaskReveal direction="up">
+        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 p-6 text-white hero-shimmer-line relative">
+          <div className="relative z-10 flex items-start gap-3">
             <Phone className="mt-0.5 h-6 w-6 shrink-0" />
             <div>
               <p className="text-lg font-bold">借金・お金の悩みは一人で抱え込まないで</p>
@@ -234,7 +241,7 @@ export default function CashOutPage() {
             </div>
           </div>
         </div>
-      </Reveal>
+      </MaskReveal>
     </>
   );
 }
